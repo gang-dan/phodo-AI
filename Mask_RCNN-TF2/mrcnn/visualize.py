@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 from matplotlib import patches,  lines
 from matplotlib.patches import Polygon
 import IPython.display
+import cv2
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../")
@@ -99,6 +100,7 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     """
     # Number of instances
     N = boxes.shape[0]
+    print(f'N : {N}')
     if not N:
         print("\n*** No instances to display *** \n")
     else:
@@ -149,8 +151,10 @@ def display_instances(image, boxes, masks, class_ids, class_names,
         ax.text(x1, y1 + 8, caption,
                 color='w', size=11, backgroundcolor="none")
 
+        print(f'masks : {masks}')
         # Mask
         mask = masks[:, :, i]
+        print(f'mask.shape : {mask.shape}')
 
         #mask 안 불투명하게 채우기
         #if show_mask:
@@ -161,17 +165,23 @@ def display_instances(image, boxes, masks, class_ids, class_names,
         padded_mask = np.zeros(
             (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
         padded_mask[1:-1, 1:-1] = mask
+        print(f'masked_image.shape : {masked_image.shape}')
+        print(f'padded_mask.shape : {padded_mask.shape}')
         contours = find_contours(padded_mask, 0.5) #외곽선 검출
-        print(contours)
+        print(f'contours : {contours}')
         for verts in contours:
             # Subtract the padding and flip (y, x) to (x, y)
             verts = np.fliplr(verts) - 1
+            print(f'verts : {verts}')
             p = Polygon(verts, facecolor="none", edgecolor=color,linewidth=3.0)
             ax.add_patch(p)
 
     ax.imshow(masked_image.astype(np.uint8))
+    #plt.savefig("/gdrive/My Drive/PHODO/Segmentation Model/Mask_RCNN-TF2/save_img.png")
     if auto_show:
         plt.show()
+    
+    
 
 
 def display_differences(image,
