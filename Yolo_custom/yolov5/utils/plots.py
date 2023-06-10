@@ -184,7 +184,7 @@ class Annotator:
         mask_binary_img = cv2.cvtColor(mask_binary_img, cv2.COLOR_RGB2GRAY)
         dst, mask_binary_img = cv2.threshold(mask_binary_img, 1, 255, cv2.THRESH_BINARY)
         
-        cv2.imwrite('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/gorill_mask_img.jpg', mask_binary_img)
+        cv2.imwrite('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/trevi_mask_img.jpg', mask_binary_img)
       
         #######외곽선만 화면에 표시       
         _, ax = plt.subplots(1, figsize=(100,100))
@@ -195,6 +195,8 @@ class Annotator:
         # Show area outside image boundaries.
         height, width = self.im.shape[:2]
         c, h, w = masks.shape[:3]
+        print(f'height,width : {height},{width}')
+        print(f'h,w : {h},{w}')
         #print(f'img shape -> height:{height}, width:{width}')
         #print(f'masks shape -> height:{h}, width:{w}')
         ax.set_ylim(height + 10, -10)
@@ -203,7 +205,7 @@ class Annotator:
         ax.set_title("포토 가이드")
 
         #print("mask 추출 시작합니다!!!!!!!!!\n")
-        
+    
         json_contour_data = {}
         json_mask_data = {}
         count = 0 
@@ -215,41 +217,49 @@ class Annotator:
           masks = [mask.cpu().numpy() for mask in masks]
 
         #np.save('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/masks_np', masks)
-      
+        length_dic = {}
         # masks 에서 mask는 사람 객체 하나하나를 의미
         for index, mask in enumerate(masks):
           # person : 0 만 추출
           if(labels[index] == 0):
+            #padded_mask = np.zeros((mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+            #padded_mask[1:-1, 1:-1] = mask
+            #print(f'height,width : {mask.shape[:2]}')
             mask = scale_image(mask.shape, mask, self.im.shape)
+            print(f'height,width : {mask.shape[:2]}')
+            h,w = mask.shape[:2]
+            length_dic["width"] = w
+            length_dic["height"] = h
+
             contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             cv2.drawContours(black_contour_img, contours, -1, (255,255,255), 4) #contour_img
 
             #h,w = mask.shape[:2]
             #vis2 = cv2.CreateMat(h, w, cv2.CV_32SC2)
             tmp_list = []
+          
             
             #json 파일로 contours를 인덱싱하여 저장합니다.
             print(len(contours[0]))
             for i in range(0,len(contours[0])):
               point_dic = {}
-              point_dic["x"] = float(contours[0][i][0][0])
-              point_dic["y"] = float(contours[0][i][0][1])
+              point_dic["x"] = np.double(contours[0][i][0][0])
+              point_dic["y"] = np.double(contours[0][i][0][1])
               tmp_list.append(point_dic)
               
               #json_mask_data[str(count)] = mask.tolist()
             json_contour_data[str(count)] = tmp_list
             count = count + 1
           
-        
-        
-        with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/contour_data.json','w') as f:
+        with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/trevi_length_dic.json','w') as f:
+            json.dump(length_dic, f)
+      
+        with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/trevi_contour_data.json','w') as f:
           json.dump(json_contour_data, f)
 
-        #with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/json_mask_data.json','w') as f:
-        #  json.dump(json_mask_data, f)
         
         black_contour_img = cv2.cvtColor(black_contour_img, cv2.COLOR_BGR2RGB)
-        cv2.imwrite('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/colo_black_contour_img.png', black_contour_img)
+        #cv2.imwrite('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/firenze_black_contour_img.png', black_contour_img)
         
         
     def rectangle(self, xy, fill=None, outline=None, width=1):

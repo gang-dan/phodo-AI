@@ -39,6 +39,7 @@ from matplotlib import patches,  lines
 from matplotlib.patches import Polygon
 import IPython.display
 import numpy as np
+import json
 
 import torch
 
@@ -59,7 +60,7 @@ from utils.torch_utils import select_device, smart_inference_mode
 
 
 
-def display_instances(image, masks,
+def display_instances(image, masks,labels,
                       scores=None, title="",
                       figsize=(16, 16), ax=None,
                       show_mask=True, show_bbox=True,
@@ -100,13 +101,18 @@ def display_instances(image, masks,
     ax.axis('off')
     ax.set_title(title)
 
+    # Contour
+    json_contour_data = {}
+    count = 0
+
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
       color = (1,1,1)
 
       # Mask
       mask = masks[:, :, i]
-      
+
+       
       # Mask Polygon
       # Pad to ensure proper polygons for masks that touch image edges.
       padded_mask = np.zeros(
@@ -120,13 +126,28 @@ def display_instances(image, masks,
           p = Polygon(verts, facecolor="none", edgecolor=color,linewidth=3.0)
           ax.add_patch(p)
 
+      if(labels[i] == 0):
+        tmp_list = []   
+        #json 파일로 contours를 인덱싱하여 저장합니다.
+        for i in range(0,len(contours[0])):
+          point_dic = {}
+          point_dic["x"] = np.double(contours[0][i][0][0])
+          point_dic["y"] = np.double(contours[0][i][0][1])
+          tmp_list.append(point_dic)
+      
+              
+    #json_mask_data[str(count)] = mask.tolist()
+    json_contour_data[str(count)] = tmp_list
+    count = count + 1
+
     #masked_image = masked_image[::-1]
     ax.imshow(masked_image.astype(np.uint8))
     if auto_show:
         plt.show()
     
     plt.savefig('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/saved_img.png')
-    
+    with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/contour_data2.json','w') as f:
+          json.dump(json_contour_data, f)
     return masked_image
 
 @smart_inference_mode()
@@ -259,7 +280,7 @@ def run(
                 #print(f'masks 길이 -> height:{h}, width:{w}')
                 #print(f'masks -> {masks}')
 
-                #result = display_instances(imc, masks)
+                #result = display_instances(imc, masks,det[:,5])
                 #save_result = result[::-1]
                 #cv2.imwrite('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/saved_img.png', save_result)
 
