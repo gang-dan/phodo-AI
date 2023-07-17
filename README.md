@@ -13,6 +13,9 @@
 ## 🗺️ Information
 
 ### Technology Stack
+* Deep Learning
+* Computer Vision
+* CNN
 * Yolov5
 * Mask RCNN
 * Pytorch
