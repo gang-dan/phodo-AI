@@ -1,6 +1,27 @@
 # PHODO - AI
+<div align=Left>
+<img src="https://img.shields.io/badge/Deep Learning-00FFFF?style=round-square&logo=Deep Learning&logoColor=white"/>
+<img src="https://img.shields.io/badge/Computer Vision-00FFFF?style=round-square&logo=Computer Vision&logoColor=white"/>
+<img src="https://img.shields.io/badge/Pytorch-3DDC84?style=round-square&logo=Android&logoColor=white"/>
+<img src="https://img.shields.io/badge/Tensorflow-FF6F00?style=round-square&logo=Tensorflow&logoColor=white"/>
+<img src="https://img.shields.io/badge/Yolo-00FFFF?style=round-square&logo=Yolo&logoColor=white"/>
+<img src="https://img.shields.io/badge/Mask-RCNN-000000?style=round-square&logo=Mask-RCNN&logoColor=white"/>
+</div>
+
 > Phodo의 포토가이드 만들기 서비스를 지원하기 위해 적용한이미지 세그멘테이션 모델
 
+## 🗺️ Information
+
+### Technology Stack
+* Yolov5
+* Mask RCNN
+* Pytorch
+* Tensorflow
+* OpenCV
+
+## Foldering
+```
+```
 
 
 
