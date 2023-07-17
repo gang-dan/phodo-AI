@@ -1,8 +1,9 @@
 # PHODO - AI
->Image segmentation model of phodo application
+> 이미지 세그멘테이션 모델을 적용한 Phodo의 포토가이드 만들기 서비스
 
 
 
+# YOLOV5
 <div align="center">
   <p>
     <a align="center" href="https://ultralytics.com/yolov5" target="_blank">
