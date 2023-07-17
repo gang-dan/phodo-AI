@@ -11,7 +11,7 @@
 > Phodo의 포토가이드 만들기 서비스를 지원하기 위해 적용한이미지 세그멘테이션 모델
 
 ## 🗺️ Information
-사진의 인물(사람)의 외곽선만을 추출하기 위해 이미지 세그멘테이션 모델을 사용했습니다.
+사진의 인물(사람)의 외곽선만을 추출하기 위해 이미지 세그멘테이션 모델을 사용했습니다. <br>
 초반에는 Mask RCNN 을 사용했으나 외곽선 추출이 깔끔하지 못하여 더 높은 성능을 보이는 yoloyv5 모델을 사용했습니다.
 
 인물의 외곽선만을 추출하기 위해 yolov5-utils-plots.py 코드를 수정했습니다.
@@ -32,13 +32,13 @@
 .
 ├── Mask_RCNN-TF2
 ├── Yolo (origin source)
-├── Yolo_custom (custom source, actually used in the app) 
-│   └── yolov5
-│       ├── calssify
-│       ├── data
-│       ├── models
-│       ├── segment
-│       └── utils
+└── Yolo_custom (custom source, actually used in the app) 
+    └── yolov5
+        ├── calssify
+        ├── data
+        ├── models
+        ├── segment
+        └── utils
 
 ```
 
