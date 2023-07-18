@@ -15,6 +15,47 @@
 초반에는 Mask RCNN 을 사용했으나 외곽선 추출이 깔끔하지 못하여 더 높은 성능을 보이는 yoloyv5 모델을 사용했습니다.
 
 인물의 외곽선만을 추출하기 위해 yolov5-utils-plots.py 코드를 수정했습니다.
+코드 실행을 통해 다음과 같은 데이터를 지정된 폴더에 저장합니다
+* 원본 이미지
+* 외곽선에 데이터 (.json)
+* 조정된 이미지의 사이즈 데이터 (.json)
+* 
+```
+for index, mask in enumerate(masks):
+          # person : 0 만 추출
+          if(labels[index] == 0):
+            #padded_mask = np.zeros((mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+            #padded_mask[1:-1, 1:-1] = mask
+            mask = scale_image(mask.shape, mask, self.im.shape)
+            h,w = mask.shape[:2]
+            length_dic["width"] = w
+            length_dic["height"] = h
+
+            contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+            cv2.drawContours(black_contour_img, contours, -1, (255,255,255), 4) #contour_img
+
+
+            tmp_list = []
+
+            #json 파일로 contours를 인덱싱하여 저장합니다.
+            print(len(contours[0]))
+            for i in range(0,len(contours[0])):
+              point_dic = {}
+              point_dic["x"] = np.double(contours[0][i][0][0])
+              point_dic["y"] = np.double(contours[0][i][0][1])
+              tmp_list.append(point_dic)
+              
+            json_contour_data[str(count)] = tmp_list
+            count = count + 1
+          
+        with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/trevi_length_dic.json','w') as f:
+            json.dump(length_dic, f)
+      
+        with open('/gdrive/My Drive/PHODO/Segmentation Model/Yolo_custom/yolov5/trevi_contour_data.json','w') as f:
+          json.dump(json_contour_data, f)
+
+        black_contour_img = cv2.cvtColor(black_contour_img, cv2.COLOR_BGR2RGB)
+```
 
 
 ### Technology Stack
