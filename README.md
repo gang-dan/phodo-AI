@@ -21,13 +21,6 @@
 * 조정된 이미지의 사이즈 데이터 (.json)
 * 인물 mask 이미지 -> 인물만 검정색 mask로 표시 <br>
 
-현재 yolov5 오픈소스의 출력값 코드를 변형하는 방식으로 원하는 데이터를 얻어내고 있습니다. <br>
-또한 google colab 에서 실험한 코드를 앱에 적용시키는 부분을 계속해서 고민하고 있습니다. <br>
-다음과 같은 3가지 방법을 시도할 계획입니다. <br>
-1. 앱 자체에 모델을 내장 (모델을 SDK 로 만들어 통합 빌드)
-2. 안드로이드에서 colab에 접근해 연동
-3. server에 모델을 올리고 안드로이드은 서버에 요청
-  
 ```
 for index, mask in enumerate(masks):
           # person : 0 만 추출
@@ -64,6 +57,15 @@ for index, mask in enumerate(masks):
 
         black_contour_img = cv2.cvtColor(black_contour_img, cv2.COLOR_BGR2RGB)
 ```
+
+현재 yolov5 오픈소스의 출력값 코드를 변형하는 방식으로 원하는 데이터를 얻어내고 있습니다. <br>
+또한 google colab 에서 실험한 코드를 앱에 적용시키는 부분을 계속해서 고민하고 있습니다. <br>
+다음과 같은 3가지 방법을 시도할 계획입니다. <br>
+1. 앱 자체에 모델을 내장 (모델을 SDK 로 만들어 통합 빌드)
+2. 안드로이드에서 colab에 접근해 연동
+3. server에 모델을 올리고 안드로이드은 서버에 요청
+  
+
 
 
 ### Technology Stack
