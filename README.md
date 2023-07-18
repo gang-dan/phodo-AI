@@ -75,6 +75,7 @@ for index, mask in enumerate(masks):
 * Pytorch
 * Tensorflow
 * OpenCV
+* Google Colab
 
 ## 📁 Foldering
 ```
